@@ -31,24 +31,24 @@ export default function AnalysisPanel({ result }) {
   const stars = Math.max(0, Math.min(5, advantage.stars ?? 0))
   const metrics = analysis.converted_metrics ?? {
     val: '--',
-    system: 'Pending',
-    detail: 'Detailed metrics will appear after analysis.',
+    system: '待定',
+    detail: '分析完成後會顯示更詳細的指標。',
   }
   const stdInfo = analysis.standard_info ?? { code: 'N/A' }
   const redacted = (analysis.redacted_credentials ?? [])
-    .map((item) => `[FILE: ${item.name}]\n${item.content}`)
+    .map((item) => `[文件：${item.name}]\n${item.content}`)
     .join('\n\n---\n\n')
 
   return (
     <aside className="space-y-6 lg:col-span-5">
-      <section className="rounded-[1.75rem] border border-cyan-400/14 bg-gradient-to-b from-cyan-400/10 to-slate-900/80 p-6 shadow-2xl shadow-cyan-950/10 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] border-cyan-400/14 bg-gradient-to-b from-cyan-400/10 to-slate-900/80 p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.32em] text-cyan-300/70">
               {t('trustIndex')}
             </p>
             <h3 className="mt-2 text-lg font-black text-white">
-              Trust score
+              信任分數
             </h3>
           </div>
           <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-200">
@@ -78,16 +78,16 @@ export default function AnalysisPanel({ result }) {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <MetricCard
-              label="Approval probability"
+              label="通過機率"
               value={`${stars}/5`}
-              hint={advantage.analysis ?? 'Model-generated confidence summary.'}
+              hint={advantage.analysis ?? '模型產生的信心摘要。'}
               accent="text-cyan-200"
               border="border-cyan-400/12"
             />
             <MetricCard
-              label="Identity assurance"
+              label="身分保證"
               value={ial}
-              hint={`Standard code: ${stdInfo.code}`}
+              hint={`標準代碼：${stdInfo.code}`}
               accent="text-emerald-200"
               border="border-emerald-400/12"
             />
@@ -95,14 +95,14 @@ export default function AnalysisPanel({ result }) {
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">
               {t('approvalProb')}
             </p>
             <h3 className="mt-2 text-lg font-black text-white">
-              Verdict signal
+              結論訊號
             </h3>
           </div>
           <div className="text-3xl tracking-[0.18em] text-amber-300">
@@ -110,18 +110,18 @@ export default function AnalysisPanel({ result }) {
           </div>
         </div>
         <p className="mt-4 text-sm leading-7 text-slate-300">
-          {advantage.analysis ?? 'Assessment pending.'}
+          {advantage.analysis ?? '等待評估。'}
         </p>
       </section>
 
-      <section className="rounded-[1.75rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">
               {t('aiReport')}
             </p>
             <h3 className="mt-2 text-lg font-black text-white">
-              Standardized report
+              標準化報告
             </h3>
           </div>
           <span className="rounded-lg border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-200">
@@ -131,7 +131,7 @@ export default function AnalysisPanel({ result }) {
 
         <div className="mt-5 grid gap-4">
           <MetricCard
-            label="Converted metric"
+            label="轉換指標"
             value={metrics.val}
             hint={metrics.system}
             accent="text-white"
@@ -139,10 +139,10 @@ export default function AnalysisPanel({ result }) {
 
           <div className="rounded-[1.5rem] border border-white/6 bg-slate-950/70 p-5">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">
-              Evidence digest
+              證據摘要
             </p>
             <pre className="mt-4 max-h-[220px] overflow-y-auto whitespace-pre-wrap text-[11px] leading-7 text-slate-400">
-              {redacted || 'No redacted evidence available.'}
+              {redacted || '目前沒有可顯示的去識別證據。'}
             </pre>
           </div>
         </div>

@@ -43,7 +43,7 @@
 
 @layer components {
   .glass {
-    @apply border border-white/6 bg-slate-900/70 backdrop-blur-xl shadow-2xl shadow-black/20;
+    @apply border border-white/10 bg-slate-900/70 backdrop-blur-xl shadow-2xl shadow-black/20;
   }
 
   .scanning-line {

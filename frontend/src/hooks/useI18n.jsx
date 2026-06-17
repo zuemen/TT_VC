@@ -4,7 +4,7 @@ import { TRANSLATIONS } from '../i18n/translations'
 const I18nContext = createContext(null)
 
 export function I18nProvider({ children }) {
-  const [lang, setLang] = useState('en')
+  const [lang, setLang] = useState('zh')
   const t = (key) => TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.en[key] ?? key
   return (
     <I18nContext.Provider value={{ lang, setLang, t }}>
