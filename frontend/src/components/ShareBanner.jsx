@@ -23,7 +23,7 @@ export default function ShareBanner({ shareLink, vaultShareLink, result }) {
     const { trust_info: trust, analysis } = result
     const adv = trust?.advantage ?? {}
     const popup = window.open('', '_blank')
-    popup.document.write(`<!DOCTYPE html><html><head><title>Trust Passport - Global TrustDrive</title><style>
+    popup.document.write(`<!DOCTYPE html><html><head><title>信任護照 - Global TrustDrive</title><style>
       body{font-family:Inter,Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 40px;color:#0f172a;background:#fff}
       .top{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;border-bottom:2px solid #e2e8f0;padding-bottom:18px;margin-bottom:24px}
       h1{margin:0;font-size:26px;letter-spacing:-0.03em}
@@ -38,25 +38,25 @@ export default function ShareBanner({ shareLink, vaultShareLink, result }) {
       <div class="top">
         <div>
           <h1>GLOBAL TRUSTDRIVE</h1>
-          <div class="sub">Trust Passport - AI Native Credential Certificate</div>
+          <div class="sub">信任護照 - AI 原生憑證證書</div>
         </div>
         <div>
           <div class="score">${esc(trust?.score)}</div>
           <div class="level">${esc(trust?.level)}</div>
         </div>
       </div>
-      <h2>Identity Assurance</h2>
+      <h2>身分保證</h2>
       <p>IAL: ${esc(trust?.ial)} &nbsp;|&nbsp; Standard: ${esc(analysis?.standard_info?.name)} (${esc(analysis?.standard_info?.code)})</p>
       <p>${'★'.repeat(adv.stars ?? 0)}${'☆'.repeat(5 - (adv.stars ?? 0))}</p>
       <p>${esc(adv.analysis)}</p>
-      <h2>AI Analysis</h2>
+      <h2>AI 分析</h2>
       <pre>${esc(analysis?.advantage_analysis)}</pre>
-      <h2>Metrics</h2>
+      <h2>指標</h2>
       <p><strong>${esc(analysis?.converted_metrics?.val)}</strong> | ${esc(analysis?.converted_metrics?.system)}</p>
       <p>${esc(analysis?.converted_metrics?.detail)}</p>
       <div class="footer">
-        Generated: ${new Date().toISOString()} | Document ID: ${esc(analysis?.doc_id)}<br>
-        Global TrustDrive - reference only, official verification still required.
+        產生時間：${new Date().toISOString()} | 文件 ID：${esc(analysis?.doc_id)}<br>
+        Global TrustDrive - 僅供參考，仍需正式驗證。
       </div>
       <script>setTimeout(()=>window.print(),300)</script>
     </body></html>`)
@@ -64,14 +64,14 @@ export default function ShareBanner({ shareLink, vaultShareLink, result }) {
   }
 
   return (
-    <section className="rounded-[1.75rem] border border-white/6 bg-slate-900/70 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-6">
+    <section className="glass rounded-[1.75rem] p-5 md:p-6">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">
-            Share
+            分享
           </p>
           <h3 className="mt-2 text-xl font-black tracking-tight text-white">
-            Shareable report is ready
+            可分享報告已就緒
           </h3>
           <p className="mt-2 truncate text-sm text-cyan-300/80">
             {shareLink}
@@ -96,23 +96,23 @@ export default function ShareBanner({ shareLink, vaultShareLink, result }) {
 
       <div className="mt-5 grid gap-3 md:grid-cols-3">
         <div className="rounded-[1.25rem] border border-white/6 bg-white/[0.03] px-4 py-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Share mode</p>
-          <p className="mt-2 text-sm font-bold text-white">SmartDrop viewer</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">分享模式</p>
+          <p className="mt-2 text-sm font-bold text-white">SmartDrop 檢視器</p>
         </div>
         <div className="rounded-[1.25rem] border border-white/6 bg-white/[0.03] px-4 py-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Document ID</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">文件 ID</p>
           <p className="mt-2 truncate text-sm font-bold text-white">{result?.analysis?.doc_id ?? '--'}</p>
         </div>
         <div className="rounded-[1.25rem] border border-white/6 bg-white/[0.03] px-4 py-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Vault link</p>
-          <p className="mt-2 truncate text-sm font-bold text-white">{vaultShareLink || 'Unavailable'}</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">保管庫連結</p>
+          <p className="mt-2 truncate text-sm font-bold text-white">{vaultShareLink || '無法使用'}</p>
         </div>
       </div>
 
       {vaultShareLink && (
         <div className="mt-5 rounded-[1.25rem] border border-cyan-400/14 bg-cyan-400/6 px-4 py-4">
           <p className="text-[10px] font-black uppercase tracking-[0.24em] text-cyan-200/80">
-            Native share URL
+            原生分享網址
           </p>
           <a
             href={vaultShareLink}

@@ -30,7 +30,7 @@ function GapText({ text }) {
       {sections.map((section) => (
         <div key={section.id}>
           <h4 className="mb-3 text-[11px] font-black uppercase tracking-[0.24em] text-cyan-200">
-            {section.title || 'Section'}
+            {section.title || '區段'}
           </h4>
           <div className="space-y-2 pl-2">
             {section.lines.map((line, index) => (
@@ -64,26 +64,26 @@ export default function GapAdvisor({ docId }) {
       })
       const data = await res.json()
       if (data.success) setGapText(data.gaps)
-      else setError(data.detail || data.error || 'Unknown error')
+      else setError(data.detail || data.error || '未知錯誤')
     } catch (e) {
-      setError('Network error: ' + e.message)
+      setError('網路錯誤：' + e.message)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <section className="rounded-[1.75rem] border border-amber-400/14 bg-gradient-to-b from-amber-400/10 to-slate-900/80 p-6 shadow-2xl shadow-amber-950/10 backdrop-blur-xl md:p-8">
+    <section className="glass rounded-[1.75rem] border-amber-400/14 bg-gradient-to-b from-amber-400/10 to-slate-900/80 p-6 md:p-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-amber-200/70">
             {t('gapTitle')}
           </p>
           <h3 className="mt-2 text-xl font-black text-white">
-            Missing document analysis
+            缺件分析
           </h3>
           <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-400">
-            Generate a compact gap report with the most likely missing documents, action priority, and follow-up recommendations.
+            產生精簡缺件報告，列出最可能缺少的文件、處理優先順序與後續建議。
           </p>
         </div>
 

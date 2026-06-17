@@ -85,7 +85,30 @@ const DEMO_DATA = {
   },
 }
 
-const WORKFLOW = ['Intake', 'Processing', 'Analysis', 'Report']
+const WORKFLOW = ['收件', '處理', '分析', '報告']
+
+const JURISDICTION_LABELS = {
+  USA: '美國',
+  Germany: '德國',
+  Singapore: '新加坡',
+  UK: '英國',
+  Taiwan: '台灣',
+  'South Korea': '韓國',
+  Japan: '日本',
+  Canada: '加拿大',
+  Australia: '澳洲',
+}
+
+const GOAL_LABELS = {
+  'University Study': '學術申請',
+  Employment: '就業申請',
+  'Healthcare License': '醫療執照',
+  'Digital Nomad Visa': '數位遊牧簽證',
+  'Talent Pass': '人才通行證',
+  'Skilled Migration Visa': '技術移民簽證',
+  'Exchange Program': '交換計畫',
+  'Banking Setup': '銀行開戶',
+}
 
 export default function MainPage() {
   const [jurisdiction, setJurisdiction] = useState('USA')
@@ -103,7 +126,7 @@ export default function MainPage() {
     const selected = Array.from(e.target.files)
     setFiles(selected)
     setPreviews(selected.map((file) => ({ name: file.name, img: FALLBACK_IMG })))
-    setFileLabel(`${selected.length} file(s) ready`)
+    setFileLabel(`${selected.length} 份文件已就緒`)
   }
 
   const handleDrop = (e) => {
@@ -111,7 +134,7 @@ export default function MainPage() {
     const dropped = Array.from(e.dataTransfer.files)
     setFiles(dropped)
     setPreviews(dropped.map((file) => ({ name: file.name, img: FALLBACK_IMG })))
-    setFileLabel(`${dropped.length} file(s) ready`)
+    setFileLabel(`${dropped.length} 份文件已就緒`)
   }
 
   const handleDemo = (type) => {
@@ -122,7 +145,7 @@ export default function MainPage() {
     setGoal(scenario.goal)
     setFiles(scenario.docs.map((doc) => new File([doc.content], doc.name, { type: 'text/plain' })))
     setPreviews(scenario.docs)
-    setFileLabel(`Scenario: ${scenario.goal} loaded`)
+    setFileLabel(`範例：${scenario.goal} 已載入`)
     setResult(null)
     setDocId(null)
     setNotice(null)
@@ -130,7 +153,7 @@ export default function MainPage() {
 
   const handleSubmit = async () => {
     if (!files.length) {
-      setNotice({ type: 'warning', text: 'Upload files or load a demo scenario first.' })
+      setNotice({ type: 'warning', text: '請先上傳文件或載入範例情境。' })
       return
     }
 
@@ -164,7 +187,7 @@ export default function MainPage() {
       setResult(data)
       setDocId(data.analysis?.doc_id ?? null)
     } catch (err) {
-      setNotice({ type: 'error', text: 'VaultSage Error: ' + err.message })
+      setNotice({ type: 'error', text: '系統錯誤：' + err.message })
       console.error(err)
     } finally {
       setLoading(false)
@@ -174,7 +197,9 @@ export default function MainPage() {
 
   const previewFilename = previews.map((item) => item.name).join(', ')
   const trustScore = result?.trust_info?.score ?? '--'
-  const verdict = result ? result.trust_info?.level ?? 'Assessment ready' : 'Awaiting intake'
+  const verdict = result ? result.trust_info?.level ?? '評估完成' : '等待收件'
+  const displayGoal = GOAL_LABELS[goal] ?? goal
+  const displayJurisdiction = JURISDICTION_LABELS[jurisdiction] ?? jurisdiction
 
   return (
     <div className="min-h-screen">
@@ -202,33 +227,33 @@ export default function MainPage() {
         />
 
         <section className="space-y-8 xl:col-span-9">
-          <div className="rounded-[2rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-8">
+          <div className="glass rounded-[2rem] p-6 md:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl">
                 <p className="text-[10px] font-black uppercase tracking-[0.32em] text-cyan-300/70">
                   Global TrustDrive
                 </p>
                 <h2 className="mt-3 text-3xl font-black tracking-tight text-white md:text-5xl">
-                  Credential intelligence for cross-border approvals.
+                  跨境憑證的智能審核中樞
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400 md:text-base">
-                  Upload credentials, validate them against jurisdiction rules, and present a polished decision summary with shareable evidence.
+                  上傳文件後，系統會依目標法域規則進行驗證，並輸出可共享的決策摘要與證據。
                 </p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Documents</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">文件數</p>
                   <p className="mt-2 text-2xl font-black text-white">{files.length}</p>
                 </div>
                 <div className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Status</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">狀態</p>
                   <p className="mt-2 text-2xl font-black text-cyan-300">
-                    {loading ? 'Live' : result ? 'Ready' : 'Idle'}
+                    {loading ? '運行中' : result ? '就緒' : '待機'}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Score</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">分數</p>
                   <p className="mt-2 text-2xl font-black text-emerald-300">{trustScore}</p>
                 </div>
               </div>
@@ -236,16 +261,16 @@ export default function MainPage() {
 
             <div className="mt-6 flex flex-wrap gap-3">
               <span className="rounded-full border border-white/6 bg-white/[0.03] px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-300">
-                {goal}
+                {displayGoal}
               </span>
               <span className="rounded-full border border-white/6 bg-white/[0.03] px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-300">
-                {jurisdiction}
+                {displayJurisdiction}
               </span>
               <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-300">
                 {verdict}
               </span>
               <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-200">
-                {loading ? 'Processing' : result ? 'Analysis complete' : 'Awaiting documents'}
+                {loading ? '處理中' : result ? '分析完成' : '等待文件'}
               </span>
             </div>
 
@@ -277,7 +302,7 @@ export default function MainPage() {
           </div>
 
           {result && (
-            <section className="rounded-[2rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl md:p-8">
+            <section className="glass rounded-[2rem] p-6 md:p-8">
               <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-400/12 text-cyan-300">
                   <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,13 +311,13 @@ export default function MainPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">
-                    Executive Summary
+                    執行摘要
                   </p>
                   <h3 className="mt-3 text-xl font-black tracking-tight text-white md:text-2xl">
-                    {result.analysis?.standard_info?.name ?? 'Standard review'} / {result.analysis?.standard_info?.code ?? 'N/A'}
+                    {result.analysis?.standard_info?.name ?? '標準審核'} / {result.analysis?.standard_info?.code ?? 'N/A'}
                   </h3>
                   <p className="mt-4 max-w-4xl whitespace-pre-wrap text-sm leading-7 text-slate-300 md:text-base">
-                    {result.analysis?.advantage_analysis ?? 'Analysis completed.'}
+                    {result.analysis?.advantage_analysis ?? '分析已完成。'}
                   </p>
                 </div>
               </div>
@@ -302,6 +327,10 @@ export default function MainPage() {
           {docId && <GapAdvisor docId={docId} />}
         </section>
       </main>
+
+      <div className="mx-auto max-w-[1600px] px-4 pb-10 text-[11px] uppercase tracking-[0.24em] text-slate-600 md:px-8 xl:px-8">
+        工作流：{WORKFLOW.join(' / ')}
+      </div>
     </div>
   )
 }

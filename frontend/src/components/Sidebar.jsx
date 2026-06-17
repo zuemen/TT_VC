@@ -2,40 +2,40 @@ import { useRef } from 'react'
 import { useI18n } from '../hooks/useI18n'
 
 const JURISDICTIONS = [
-  { value: 'USA', label: 'United States' },
-  { value: 'Germany', label: 'Germany' },
-  { value: 'Singapore', label: 'Singapore' },
-  { value: 'UK', label: 'United Kingdom' },
-  { value: 'Taiwan', label: 'Taiwan' },
-  { value: 'South Korea', label: 'South Korea' },
-  { value: 'Japan', label: 'Japan' },
-  { value: 'Canada', label: 'Canada' },
-  { value: 'Australia', label: 'Australia' },
+  { value: 'USA', label: '美國' },
+  { value: 'Germany', label: '德國' },
+  { value: 'Singapore', label: '新加坡' },
+  { value: 'UK', label: '英國' },
+  { value: 'Taiwan', label: '台灣' },
+  { value: 'South Korea', label: '韓國' },
+  { value: 'Japan', label: '日本' },
+  { value: 'Canada', label: '加拿大' },
+  { value: 'Australia', label: '澳洲' },
 ]
 
 const GOALS = [
-  { value: 'University Study', label: 'University Study' },
-  { value: 'Employment', label: 'Employment' },
-  { value: 'Healthcare License', label: 'Healthcare License' },
-  { value: 'Digital Nomad Visa', label: 'Digital Nomad Visa' },
-  { value: 'Talent Pass', label: 'Talent Pass' },
-  { value: 'Skilled Migration Visa', label: 'Skilled Migration Visa' },
-  { value: 'Exchange Program', label: 'Exchange Program' },
-  { value: 'Banking Setup', label: 'Banking Setup' },
+  { value: 'University Study', label: '學術申請' },
+  { value: 'Employment', label: '就業申請' },
+  { value: 'Healthcare License', label: '醫療執照' },
+  { value: 'Digital Nomad Visa', label: '數位遊牧簽證' },
+  { value: 'Talent Pass', label: '人才通行證' },
+  { value: 'Skilled Migration Visa', label: '技術移民簽證' },
+  { value: 'Exchange Program', label: '交換計畫' },
+  { value: 'Banking Setup', label: '銀行開戶' },
 ]
 
 const DEMOS = [
-  { key: 'Study', title: 'Academic Pack', detail: '3 files, study visa flow' },
-  { key: 'Career', title: 'Employment Pack', detail: '2 files, career verification' },
-  { key: 'Taiwan', title: 'Taiwan Pack', detail: 'NCCU and bank proof' },
-  { key: 'Korea', title: 'Korea Pack', detail: 'Employment and tax proof' },
+  { key: 'Study', title: '學術套件', detail: '3 份文件，學簽流程' },
+  { key: 'Career', title: '就業套件', detail: '2 份文件，職涯驗證' },
+  { key: 'Taiwan', title: '台灣套件', detail: '政大與銀行證明' },
+  { key: 'Korea', title: '韓國套件', detail: '就業與稅務證明' },
 ]
 
 const STEPS = [
-  { id: 'upload', label: 'Intake' },
-  { id: 'process', label: 'Processing' },
-  { id: 'analyze', label: 'Analysis' },
-  { id: 'report', label: 'Report' },
+  { id: 'upload', label: '收件' },
+  { id: 'process', label: '處理' },
+  { id: 'analyze', label: '分析' },
+  { id: 'report', label: '報告' },
 ]
 
 export default function Sidebar({
@@ -53,12 +53,11 @@ export default function Sidebar({
 }) {
   const { t } = useI18n()
   const inputRef = useRef()
-
   const stepIndex = STEPS.findIndex((step) => step.id === activeStep)
 
   return (
     <aside className="space-y-6 xl:col-span-3">
-      <section className="rounded-[1.75rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] p-6">
         <div className="mb-6 flex items-center gap-3">
           <span className="h-10 w-1.5 rounded-full bg-cyan-400" />
           <div>
@@ -66,7 +65,7 @@ export default function Sidebar({
               {t('scenarioSetup')}
             </p>
             <h2 className="mt-1 text-base font-black text-white">
-              Configure case
+              案件設定
             </h2>
           </div>
         </div>
@@ -108,18 +107,18 @@ export default function Sidebar({
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border border-cyan-400/14 bg-gradient-to-b from-cyan-400/10 to-slate-900/80 p-6 shadow-2xl shadow-cyan-950/10 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] border-cyan-400/14 bg-gradient-to-b from-cyan-400/10 to-slate-900/80 p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.32em] text-cyan-300/70">
               {t('secureIntake')}
             </p>
             <h3 className="mt-1 text-base font-black text-white">
-              Upload set
+              文件上傳
             </h3>
           </div>
           <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-200">
-            Ready
+            就緒
           </span>
         </div>
 
@@ -180,7 +179,7 @@ export default function Sidebar({
                       {step.label}
                     </p>
                     <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">
-                      {state}
+                      {state === 'done' ? '完成' : state === 'active' ? '進行中' : '等待中'}
                     </p>
                   </div>
                 </div>
@@ -190,13 +189,13 @@ export default function Sidebar({
         )}
       </section>
 
-      <section className="rounded-[1.75rem] border border-white/6 bg-slate-900/70 p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <section className="glass rounded-[1.75rem] p-6">
         <div className="mb-4">
           <p className="text-[10px] font-black uppercase tracking-[0.32em] text-slate-500">
             {t('instantDemos')}
           </p>
           <h3 className="mt-1 text-base font-black text-white">
-            Load scenario
+            載入範例
           </h3>
         </div>
 

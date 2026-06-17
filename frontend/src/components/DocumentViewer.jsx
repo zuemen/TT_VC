@@ -5,7 +5,7 @@ const FALLBACK_IMG = 'https://cdn.pixabay.com/photo/2013/07/12/15/20/document-14
 
 function truncateText(text) {
   const value = String(text ?? '')
-  if (!value) return 'No content preview available.'
+  if (!value) return '目前沒有可預覽的內容。'
   if (value.length <= 180) return value
   return `${value.slice(0, 180).trim()}...`
 }
@@ -50,10 +50,10 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
                 </svg>
               </div>
               <h3 className="mt-6 text-xl font-black text-white">
-                Waiting for document intake
+                等待文件收件
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-500">
-                Upload a document set or load a demo scenario to see the verification workspace.
+                上傳文件組合或載入範例情境，即可進入驗證工作區。
               </p>
             </div>
           </div>
@@ -63,14 +63,14 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">
-                    Document set
+                    文件組
                   </p>
                   <h3 className="mt-2 text-lg font-black text-white">
-                    {previews.length} files
+                    {previews.length} 份文件
                   </h3>
                 </div>
                 <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-200">
-                  Ready
+                  就緒
                 </span>
               </div>
 
@@ -114,10 +114,10 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
               <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0">
                   <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">
-                    Active document
+                    目前文件
                   </p>
                   <h3 className="mt-2 text-2xl font-black tracking-tight text-white md:text-3xl">
-                    {activeDoc?.name ?? 'Document preview'}
+                    {activeDoc?.name ?? '文件預覽'}
                   </h3>
                   <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
                     {truncateText(activeDoc?.content)}
@@ -125,13 +125,13 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[1.25rem] border border-white/6 bg-white/[0.03] px-4 py-3">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Files</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">文件數</p>
                     <p className="mt-2 text-lg font-black text-white">{previews.length}</p>
                   </div>
                   <div className="rounded-[1.25rem] border border-white/6 bg-white/[0.03] px-4 py-3">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Mode</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">模式</p>
                     <p className="mt-2 text-lg font-black text-cyan-300">
-                      {isScanning ? 'Scanning' : 'Ready'}
+                      {isScanning ? '掃描中' : '就緒'}
                     </p>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
                 <div className="overflow-hidden rounded-[1.75rem] border border-white/6 bg-slate-950/60">
                   <div className="border-b border-white/6 px-5 py-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">
-                      Preview canvas
+                      預覽畫布
                     </p>
                   </div>
                   <div className="grid min-h-[360px] place-items-center p-6">
@@ -160,25 +160,25 @@ export default function DocumentViewer({ previews = [], isScanning = false, file
 
                 <div className="space-y-4">
                   <div className="rounded-[1.5rem] border border-white/6 bg-white/[0.03] p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Inspection notes</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">檢視備註</p>
                     <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
-                      <p>{activeDoc ? 'Document is queued for verification and extracted into the analysis pipeline.' : 'No active document selected.'}</p>
+                      <p>{activeDoc ? '文件已進入驗證流程，並送入分析管線。' : '尚未選取任何文件。'}</p>
                       <p className="text-slate-500">
-                        Use the left rail to switch between files and compare them in one place.
+                        你可以使用左側清單在不同文件之間切換比對。
                       </p>
                     </div>
                   </div>
 
                   <div className="rounded-[1.5rem] border border-white/6 bg-white/[0.03] p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">Document details</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">文件細節</p>
                     <div className="mt-4 space-y-3">
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Selected file</span>
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-500">已選文件</span>
                         <span className="truncate text-sm font-bold text-white">{activeDoc?.name ?? '--'}</span>
                       </div>
                       <div className="flex items-center justify-between gap-4">
-                        <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Preview source</span>
-                        <span className="truncate text-sm font-bold text-cyan-300">{activeDoc?.img ? 'Image preview' : 'Fallback preview'}</span>
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-500">預覽來源</span>
+                        <span className="truncate text-sm font-bold text-cyan-300">{activeDoc?.img ? '圖片預覽' : '備援預覽'}</span>
                       </div>
                     </div>
                   </div>

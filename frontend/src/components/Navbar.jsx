@@ -7,10 +7,10 @@ const LANGS = [
 ]
 
 const TABS = [
-  { label: 'Dashboard', active: true },
-  { label: 'Cases', active: false },
-  { label: 'Audit Trail', active: false },
-  { label: 'Network', active: false },
+  { label: '總覽', active: true },
+  { label: '案件', active: false },
+  { label: '稽核軌跡', active: false },
+  { label: '網路', active: false },
 ]
 
 export default function Navbar() {
@@ -32,7 +32,7 @@ export default function Navbar() {
                 {t('brandName')}
               </h1>
               <span className="hidden rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-cyan-300 md:inline-flex">
-                Live
+                在線
               </span>
             </div>
             <p className="mt-1 truncate text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">
