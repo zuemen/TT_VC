@@ -1,3 +1,11 @@
-﻿node_modules
+node_modules/
+**/node_modules/
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+dist/
+build/
 .DS_Store
+Thumbs.db
