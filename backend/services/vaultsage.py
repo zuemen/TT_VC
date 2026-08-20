@@ -1,6 +1,6 @@
 import asyncio
 import re
-import random
+import secrets
 import string
 import time
 from typing import List, Optional, Tuple
@@ -53,7 +53,13 @@ def redact_pii(text: str) -> str:
 
 
 def _rand_doc_id() -> str:
-    return "VS-GTD-" + "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    """分享用文件識別碼。
+
+    docId 就是分享連結的唯一憑證，必須不可預測。舊版用 random.choices
+    （Mersenne Twister，非密碼學安全）且只有 6 碼，可被列舉或預測，
+    等同任何人都能撈到他人上傳文件的分析結果。改用 secrets（96 bits）。
+    """
+    return "VS-GTD-" + secrets.token_hex(12).upper()
 
 
 async def _upload_file(api_key: str, content: bytes, filename: str, mime_type: str) -> str:

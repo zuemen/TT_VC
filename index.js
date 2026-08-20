@@ -48,6 +48,21 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// /api/chat 與 /api/gap-advisor 每次呼叫都會消耗伺服器端的 VaultSage 額度，
+// 只靠整體 60 次/15 分鐘不夠，另外加一層更嚴格的限制避免額度被刷爆。
+const aiLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'AI 查詢過於頻繁，請稍候再試。' },
+});
+
+// docId 是取用整份文件分析的唯一憑證，先做格式檢查再進 KV，
+// 避免以任意字串探測儲存層。
+const DOC_ID_RE = /^[A-Za-z0-9-]{6,64}$/;
+const isValidDocId = (id) => typeof id === 'string' && DOC_ID_RE.test(id);
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 20 * 1024 * 1024, files: 10 },
@@ -131,6 +146,7 @@ app.post('/api/trust-notary', upload.array('documents', 10), async (req, res) =>
 
 // SmartDrop viewer — serve React SPA (handles /share/:docId via client-side router)
 app.get('/share/:docId', (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   res.sendFile(path.join(STATIC_ROOT, 'index.html'));
 });
 
@@ -154,6 +170,12 @@ const DEMO_DOC = {
 
 app.get('/api/share-data/:docId', async (req, res) => {
   const { docId } = req.params;
+  if (!isValidDocId(docId)) {
+    return res.status(400).json({ success: false, error: 'Invalid document id.' });
+  }
+  // 分享內容含使用者上傳文件的分析結果：不得被快取或被搜尋引擎收錄
+  res.set('Cache-Control', 'no-store, private');
+  res.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   const doc = await store.get(docId);
 
   if (!doc) {
@@ -175,7 +197,7 @@ app.get('/api/share-data/:docId', async (req, res) => {
 });
 
 // Gap Advisor — AI-powered missing document analysis
-app.post('/api/gap-advisor', async (req, res) => {
+app.post('/api/gap-advisor', aiLimiter, async (req, res) => {
   try {
     if (!VAULT_KEY) {
       return res.status(500).json({ success: false, error: 'Missing VAULTSAGE_API_KEY on server.' });
@@ -184,6 +206,9 @@ app.post('/api/gap-advisor', async (req, res) => {
     const { docId, doc_id } = req.body;
     const targetId = docId || doc_id;
     if (!targetId) return res.status(400).json({ success: false, error: 'Missing docId.' });
+    if (!isValidDocId(targetId)) {
+      return res.status(400).json({ success: false, error: 'Invalid document id.' });
+    }
 
     const doc = await store.get(targetId);
     if (!doc) return res.status(404).json({ success: false, error: 'Session not found or expired.' });
@@ -202,7 +227,7 @@ app.post('/api/gap-advisor', async (req, res) => {
 });
 
 // Real AI chat via VaultSage
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', aiLimiter, async (req, res) => {
   try {
     if (!VAULT_KEY) {
       return res.status(500).json({ success: false, error: 'Missing VAULTSAGE_API_KEY on server.' });
@@ -211,6 +236,12 @@ app.post('/api/chat', async (req, res) => {
     const { docId, doc_id, message } = req.body;
     const targetId = docId || doc_id;
     if (!message) return res.status(400).json({ success: false, error: 'Missing message.' });
+    if (typeof message !== 'string' || message.length > 2000) {
+      return res.status(400).json({ success: false, error: 'message 需為 2000 字以內的字串。' });
+    }
+    if (!isValidDocId(targetId)) {
+      return res.status(400).json({ success: false, error: 'Invalid document id.' });
+    }
 
     let doc = await store.get(targetId);
     if (!doc && targetId === 'VS-GTD-DEMO-TCIW') {

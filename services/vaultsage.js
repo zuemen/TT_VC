@@ -1,4 +1,5 @@
 const axios = require('axios');
+const crypto = require('crypto');
 const FormData = require('form-data');
 
 const API_BASE = 'https://api.vaultsage.ai/api/v1';
@@ -103,6 +104,19 @@ async function _createShare(apiKey, fileIds) {
   return d.share_url ?? d.url ?? (d.token ? `https://vaultsage.ai/share/${d.token}` : null);
 }
 
+/**
+ * 產生分享用文件識別碼的亂數尾碼。
+ *
+ * docId 就是分享連結的唯一憑證（/share/:docId 與 /api/share-data/:docId 都只憑
+ * 它取用整份文件分析結果），所以它必須是不可預測的。舊版用
+ * Math.random().toString(36).substr(2, 6) —— Math.random 不是密碼學安全亂數
+ * 且只有 6 碼，等於可被列舉／預測，任何人都能撈到別人上傳的護照、財力證明分析。
+ * 改用 crypto.randomBytes：96 bits 熵。
+ */
+function newDocSuffix() {
+  return crypto.randomBytes(12).toString('hex').toUpperCase();
+}
+
 function redactPII(text) {
   if (!text) return text;
   return text
@@ -127,7 +141,7 @@ async function process(apiKey, files, context) {
 
   if (isDemo) {
     console.log(`[VaultSage] Fast-tracking demo file: ${files[0].originalname}`);
-    const demoId = 'VS-GTD-DEMO-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+    const demoId = 'VS-GTD-DEMO-' + newDocSuffix();
     return {
       docId: demoId,
       standard_info: standard,
@@ -198,7 +212,7 @@ async function process(apiKey, files, context) {
   }));
 
   return {
-    docId: 'VS-GTD-' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+    docId: 'VS-GTD-' + newDocSuffix(),
     standard_info: standard,
     converted_metrics: metrics,
     advantage_analysis: analysisText,

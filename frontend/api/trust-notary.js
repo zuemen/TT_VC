@@ -95,7 +95,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: '缺少 targetCountry 或 goal。' })
     }
 
-    const docId = `TTVC-${crypto.randomUUID().slice(0, 8).toUpperCase()}`
+    // docId 即分享連結憑證，須不可預測；原本只取 UUID 前 8 碼（32 bits），
+    // 對可列舉的公開端點來說熵不足，改用 96 bits。
+    const docId = `TTVC-${crypto.randomBytes(12).toString('hex').toUpperCase()}`
     const createdAt = Math.floor(Date.now() / 1000)
     const { score, level } = buildScores(docs.length, goal, targetCountry)
     const standardInfo = buildStandardInfo(goal, targetCountry)
