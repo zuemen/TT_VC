@@ -19,14 +19,22 @@ if not VAULT_KEY:
 
 app = FastAPI(title="Global TrustDrive API", version="7.0.0")
 
-_ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
+# CORS 白名單。預設值原本是 "*"，配上下面的 allow_credentials=True 之後，
+# Starlette 會逐一回應請求端的 Origin 並附上 Access-Control-Allow-Credentials，
+# 等於任何網站都能帶著使用者憑證跨站讀取本 API 的回應（內容包含使用者上傳
+# 文件的分析結果）。預設改為僅本機前端，正式環境請以 ALLOWED_ORIGINS 指定。
+_ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:4173").split(",")
+    if o.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # ── Models ────────────────────────────────────────────────────────────────────
